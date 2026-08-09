@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Project artifacts & local data caches
+artifacts/*
+!artifacts/.gitkeep
+!artifacts/figures/
+artifacts/figures/*
+!artifacts/figures/.gitkeep
+data/*
+!data/.gitkeep
+input/*
+!input/.gitkeep
+!input/README.md
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+*.swp
+.env
+.optuna/
+catboost_info/
+*.log
