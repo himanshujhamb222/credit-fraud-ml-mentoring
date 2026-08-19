@@ -1,4 +1,4 @@
-"""Load credit-fraud style data and create stratified splits."""
+"""Load credit-default style data and create stratified splits."""
 
 from __future__ import annotations
 
@@ -43,8 +43,8 @@ def load_raw_dataframe() -> pd.DataFrame:
 
     Priority:
     1. Existing ``DATA_PATH``
-    2. Download ``DATA_URL`` into ``DATA_PATH`` (or data/creditcard.csv)
-    3. OpenML ``OPENML_DATASET_NAME``
+    2. Download ``DATA_URL`` into ``DATA_PATH``
+    3. OpenML ``OPENML_DATASET_NAME`` (optional fallback)
     """
     ensure_dirs()
     path = resolve_data_path()
@@ -52,7 +52,7 @@ def load_raw_dataframe() -> pd.DataFrame:
         print(f"Loading local CSV: {path}")
         df = pd.read_csv(path)
     elif config.DATA_URL:
-        dest = Path(config.DATA_PATH) if config.DATA_PATH else config.DATA_DIR / "creditcard.csv"
+        dest = Path(config.DATA_PATH) if config.DATA_PATH else config.DATA_DIR / "credit_default.csv"
         try:
             _download_url(config.DATA_URL, dest)
             df = pd.read_csv(dest)
@@ -65,7 +65,7 @@ def load_raw_dataframe() -> pd.DataFrame:
             df.to_csv(dest, index=False)
     elif config.OPENML_DATASET_NAME:
         df = _load_openml(config.OPENML_DATASET_NAME)
-        dest = Path(config.DATA_PATH) if config.DATA_PATH else config.DATA_DIR / "creditcard.csv"
+        dest = Path(config.DATA_PATH) if config.DATA_PATH else config.DATA_DIR / "credit_default.csv"
         dest.parent.mkdir(parents=True, exist_ok=True)
         df.to_csv(dest, index=False)
     else:
@@ -80,7 +80,6 @@ def load_raw_dataframe() -> pd.DataFrame:
         )
 
     if config.MAX_ROWS is not None and len(df) > config.MAX_ROWS:
-        # Stratified subsample so fraud rate stays representative
         df, _ = train_test_split(
             df,
             train_size=config.MAX_ROWS,
@@ -94,20 +93,39 @@ def load_raw_dataframe() -> pd.DataFrame:
 
 
 def _normalize_columns(df: pd.DataFrame) -> pd.DataFrame:
-    """Light cleanup so OpenML / session CSVs behave like the classic fraud file."""
+    """Rename UCI X*/Y codes to interpretable names and clean the target."""
     out = df.copy()
     out.columns = [str(c).strip() for c in out.columns]
-    # Common OpenML alias
+
+    # UCI static CSV uses X1…X23, Y
+    rename = {k: v for k, v in config.UCI_COLUMN_MAP.items() if k in out.columns}
+    if rename:
+        out = out.rename(columns=rename)
+
+    # Drop pure ID if present
+    for id_col in ("ID", "id", "Id"):
+        if id_col in out.columns:
+            out = out.drop(columns=[id_col])
+
+    # Target aliases from session CSVs / older dumps
     if config.TARGET_COL not in out.columns:
-        for candidate in ("class", "Class", "target", "Target", "fraud", "isFraud"):
+        for candidate in (
+            "default.payment.next.month",
+            "default payment next month",
+            "Class",
+            "class",
+            "target",
+            "Y",
+        ):
             if candidate in out.columns:
                 out = out.rename(columns={candidate: config.TARGET_COL})
                 break
-    # Ensure binary 0/1 ints when possible
+
     if config.TARGET_COL in out.columns:
         out[config.TARGET_COL] = pd.to_numeric(out[config.TARGET_COL], errors="coerce")
         out = out.dropna(subset=[config.TARGET_COL])
         out[config.TARGET_COL] = out[config.TARGET_COL].astype(int)
+
     return out
 
 
@@ -141,3 +159,17 @@ def load_and_split() -> tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series, 
     x, y = split_xy(raw)
     x_train, x_test, y_train, y_test = train_test_split_stratified(x, y)
     return x_train, x_test, y_train, y_test, raw
+
+
+def feature_glossary(columns: list[str] | None = None) -> pd.DataFrame:
+    """Return a mentoring-friendly feature dictionary as a table."""
+    cols = columns or list(config.FEATURE_DICTIONARY.keys())
+    rows = []
+    for col in cols:
+        rows.append(
+            {
+                "feature": col,
+                "description": config.FEATURE_DICTIONARY.get(col, "(see session data dictionary)"),
+            }
+        )
+    return pd.DataFrame(rows)

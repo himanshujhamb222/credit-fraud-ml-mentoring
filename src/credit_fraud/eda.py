@@ -1,16 +1,16 @@
-"""EDA for independent (X) and dependent (y) variables."""
+"""EDA for independent (X) and dependent (y) variables — Plotly charts."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Any
 
-import matplotlib.pyplot as plt
 import pandas as pd
-import seaborn as sns
+import plotly.graph_objects as go
+import plotly.express as px
 
 from credit_fraud import config
-from credit_fraud.io_utils import ensure_dirs, save_figure, save_json
+from credit_fraud.io_utils import ensure_dirs, round_floats, save_json, save_plotly_figure
 
 
 @dataclass
@@ -18,7 +18,6 @@ class EDAResult:
     target_summary: pd.DataFrame
     describe_x: pd.DataFrame
     missingness: pd.DataFrame
-    by_class_means: pd.DataFrame
     figures: dict[str, Any]
     imbalance_ratio: float
 
@@ -27,75 +26,147 @@ def target_summary(y: pd.Series) -> tuple[pd.DataFrame, float]:
     """Dependent-variable summary: counts, rates, imbalance ratio (neg/pos)."""
     counts = y.value_counts().sort_index()
     rates = y.value_counts(normalize=True).sort_index()
-    summary = pd.DataFrame({"count": counts, "rate": rates})
+    summary = pd.DataFrame({"count": counts, "rate": rates.round(2)})
     summary.index.name = config.TARGET_COL
     pos = int((y == config.POSITIVE_LABEL).sum())
     neg = int((y != config.POSITIVE_LABEL).sum())
     imbalance = (neg / pos) if pos else float("inf")
-    return summary.reset_index(), float(imbalance)
+    return summary.reset_index(), round(float(imbalance), 2)
 
 
 def describe_features(x: pd.DataFrame) -> pd.DataFrame:
-    """Independent-variable numeric describe."""
-    return x.describe().T.reset_index().rename(columns={"index": "feature"})
+    """Independent-variable numeric describe (rounded)."""
+    return round_floats(x.describe().T.reset_index().rename(columns={"index": "feature"}))
 
 
 def missingness_table(x: pd.DataFrame) -> pd.DataFrame:
     miss = x.isna().sum()
-    return (
-        pd.DataFrame({"feature": miss.index, "n_missing": miss.values, "pct_missing": miss.values / len(x)})
+    return round_floats(
+        pd.DataFrame(
+            {"feature": miss.index, "n_missing": miss.values, "pct_missing": miss.values / len(x)}
+        )
         .sort_values("n_missing", ascending=False)
         .reset_index(drop=True)
     )
 
 
-def means_by_class(x: pd.DataFrame, y: pd.Series) -> pd.DataFrame:
-    """Feature means (and std) split by fraud / non-fraud — teaching table."""
-    frame = x.copy()
-    frame["_target"] = y.values
-    grouped = frame.groupby("_target")
-    means = grouped.mean().T
-    stds = grouped.std().T
-    means.columns = [f"mean_class_{c}" for c in means.columns]
-    stds.columns = [f"std_class_{c}" for c in stds.columns]
-    out = means.join(stds)
-    out = out.reset_index().rename(columns={"index": "feature"})
-    return out
-
-
-def plot_target_distribution(y: pd.Series) -> plt.Figure:
-    fig, ax = plt.subplots(figsize=(5, 3.5))
-    order = sorted(y.unique())
-    sns.countplot(x=y.astype(str), order=[str(o) for o in order], ax=ax, color="#2F6F8F")
-    ax.set_title("Target distribution (class imbalance)")
-    ax.set_xlabel(config.TARGET_COL)
-    ax.set_ylabel("count")
-    fig.tight_layout()
+def plot_target_distribution(y: pd.Series) -> go.Figure:
+    summary, _ = target_summary(y)
+    fig = go.Figure(
+        go.Bar(
+            x=summary[config.TARGET_COL].astype(str),
+            y=summary["count"],
+            marker_color="#2F6F8F",
+            hovertemplate="class=%{x}<br>count=%{y}<extra></extra>",
+        )
+    )
+    fig.update_layout(
+        title="Target distribution (class imbalance)",
+        xaxis_title=config.TARGET_COL,
+        yaxis_title="count",
+        template="plotly_white",
+        height=360,
+        margin=dict(l=50, r=20, t=60, b=40),
+    )
     return fig
 
 
-def plot_feature_hist_by_class(
+def plot_raw_distribution(x: pd.DataFrame, feature: str, bins: int = 40) -> go.Figure:
+    """Histogram of one raw independent variable."""
+    fig = px.histogram(
+        x,
+        x=feature,
+        nbins=bins,
+        title=f"Raw distribution: {feature}",
+        color_discrete_sequence=["#2F6F8F"],
+    )
+    fig.update_layout(
+        template="plotly_white",
+        height=380,
+        bargap=0.05,
+        xaxis_title=feature,
+        yaxis_title="count",
+    )
+    return fig
+
+
+def plot_raw_distributions_dropdown(
     x: pd.DataFrame,
-    y: pd.Series,
-    feature: str,
+    features: list[str] | None = None,
     bins: int = 40,
-) -> plt.Figure:
-    fig, ax = plt.subplots(figsize=(6, 3.5))
-    for label, color in [(0, "#5B8FA8"), (1, "#C45C26")]:
-        sns.histplot(
-            x.loc[y == label, feature],
-            bins=bins,
-            stat="density",
-            element="step",
-            fill=True,
-            alpha=0.35,
-            color=color,
-            label=f"class={label}",
-            ax=ax,
+) -> go.Figure:
+    """One Plotly chart with a dropdown over raw independent variables."""
+    features = features or list(x.columns)
+    features = [f for f in features if f in x.columns]
+    if not features:
+        raise ValueError("No features for raw distribution plot.")
+
+    fig = go.Figure()
+    for i, feature in enumerate(features):
+        fig.add_trace(
+            go.Histogram(
+                x=x[feature],
+                nbinsx=bins,
+                name=feature,
+                marker_color="#2F6F8F",
+                visible=(i == 0),
+                hovertemplate=f"{feature}=%{{x}}<br>count=%{{y}}<extra></extra>",
+            )
         )
-    ax.set_title(f"{feature} by class")
-    ax.legend()
-    fig.tight_layout()
+
+    buttons = []
+    for i, feature in enumerate(features):
+        visible = [False] * len(features)
+        visible[i] = True
+        buttons.append(
+            {
+                "label": feature,
+                "method": "update",
+                "args": [
+                    {"visible": visible},
+                    {
+                        "title": f"Raw distribution: {feature}",
+                        "xaxis": {"title": feature},
+                    },
+                ],
+            }
+        )
+
+    first = features[0]
+    fig.update_layout(
+        title=f"Raw distribution: {first}",
+        xaxis_title=first,
+        yaxis_title="count",
+        template="plotly_white",
+        height=420,
+        margin=dict(l=50, r=40, t=100, b=40),
+        showlegend=False,
+        updatemenus=[
+            {
+                "buttons": buttons,
+                "direction": "down",
+                "showactive": True,
+                "x": 1.0,
+                "xanchor": "right",
+                "y": 1.15,
+                "yanchor": "top",
+                "bgcolor": "#F7F7F7",
+                "bordercolor": "#CCCCCC",
+            }
+        ],
+        annotations=[
+            {
+                "text": "Feature:",
+                "x": 1.0,
+                "xref": "paper",
+                "y": 1.18,
+                "yref": "paper",
+                "showarrow": False,
+                "xanchor": "right",
+                "font": {"size": 12},
+            }
+        ],
+    )
     return fig
 
 
@@ -110,25 +181,29 @@ def run_eda(
     tgt, imbalance = target_summary(y)
     desc = describe_features(x)
     miss = missingness_table(x)
-    by_class = means_by_class(x, y)
 
-    figures: dict[str, Any] = {}
-    fig_target = plot_target_distribution(y)
-    figures["target_distribution"] = fig_target
+    figures: dict[str, Any] = {
+        "target_distribution": plot_target_distribution(y),
+        "raw_distributions": plot_raw_distributions_dropdown(x),
+    }
 
-    feat = example_feature or ("Amount" if "Amount" in x.columns else x.columns[0])
-    fig_feat = plot_feature_hist_by_class(x, y, feat)
-    figures[f"hist_{feat}"] = fig_feat
+    feat = example_feature or (
+        "LIMIT_BAL"
+        if "LIMIT_BAL" in x.columns
+        else ("Amount" if "Amount" in x.columns else x.columns[0])
+    )
+    figures[f"hist_{feat}"] = plot_raw_distribution(x, feat)
 
     if save:
-        save_figure(fig_target, "target_distribution.png")
-        save_figure(fig_feat, f"hist_{feat}.png")
+        save_plotly_figure(figures["target_distribution"], "target_distribution")
+        save_plotly_figure(figures["raw_distributions"], "raw_distributions")
+        save_plotly_figure(figures[f"hist_{feat}"], f"hist_{feat}")
         save_json(
             {
                 "n_rows": int(len(y)),
                 "n_features": int(x.shape[1]),
                 "imbalance_ratio_neg_over_pos": imbalance,
-                "positive_rate": float((y == config.POSITIVE_LABEL).mean()),
+                "positive_rate": round(float((y == config.POSITIVE_LABEL).mean()), 2),
                 "target_counts": tgt.set_index(config.TARGET_COL)["count"].to_dict(),
             },
             config.EDA_SUMMARY_PATH,
@@ -138,7 +213,6 @@ def run_eda(
         target_summary=tgt,
         describe_x=desc,
         missingness=miss,
-        by_class_means=by_class,
         figures=figures,
         imbalance_ratio=imbalance,
     )

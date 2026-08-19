@@ -77,11 +77,11 @@ def predict_proba_positive(model: Any, x: pd.DataFrame) -> np.ndarray:
 def classification_metrics(y_true: pd.Series | np.ndarray, y_proba: np.ndarray, threshold: float = 0.5) -> dict[str, float]:
     y_pred = (y_proba >= threshold).astype(int)
     return {
-        "pr_auc": float(average_precision_score(y_true, y_proba)),
-        "roc_auc": float(roc_auc_score(y_true, y_proba)),
-        "f1": float(f1_score(y_true, y_pred, zero_division=0)),
-        "precision": float(precision_score(y_true, y_pred, zero_division=0)),
-        "recall": float(recall_score(y_true, y_pred, zero_division=0)),
+        "pr_auc": round(float(average_precision_score(y_true, y_proba)), 2),
+        "roc_auc": round(float(roc_auc_score(y_true, y_proba)), 2),
+        "f1": round(float(f1_score(y_true, y_pred, zero_division=0)), 2),
+        "precision": round(float(precision_score(y_true, y_pred, zero_division=0)), 2),
+        "recall": round(float(recall_score(y_true, y_pred, zero_division=0)), 2),
     }
 
 
@@ -90,5 +90,5 @@ def feature_importance_frame(model: Any, feature_names: list[str]) -> pd.DataFra
         imp = np.asarray(model.feature_importances_, dtype=float)
     else:
         raise AttributeError("Model has no feature_importances_")
-    frame = pd.DataFrame({"feature": feature_names, "importance": imp})
+    frame = pd.DataFrame({"feature": feature_names, "importance": np.round(imp, 2)})
     return frame.sort_values("importance", ascending=False).reset_index(drop=True)

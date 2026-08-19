@@ -1,0 +1,97 @@
+SESSION TAKEAWAY (MOM)
+Credit default modelling walkthrough
+
+Dataset: UCI Taiwan credit default (LIMIT_BAL, PAY_*, BILL_AMT_*, PAY_AMT_*, AGE, …)
+App: streamlit run app/streamlit_app.py
+
+
+────────────────────────────────────────
+1) PROCESS WE WALKED (STREAMLIT)
+────────────────────────────────────────
+
+1. Target & EDA
+   - Check class balance (~22% defaults).
+   - Look at raw feature distributions (dropdown).
+   - Why: understand the problem and what each column means.
+
+2. Rank & Plot
+   - For each feature: put values into bins on the X-axis.
+   - Bars = number of clients in that bin.
+   - Line = capture rate (share of all defaults that fall in that bin).
+   - Why: see which feature values capture more defaults.
+
+3. Feature engineering
+   - Build simple explainable features (e.g. utilisation = bill/limit, pay ratio, avg/max payment delay).
+   - Fit transforms on train only (no leakage).
+   - Why: give the model clearer business signals.
+
+4. Modelling
+   - Start with simple baselines.
+   - Tune Random Forest and XGBoost with Optuna.
+   - Pick the winner using PR-AUC (better than accuracy when classes are imbalanced).
+   - Review feature importance in the Modelling tab.
+   - Why: fair comparison + a model you can explain.
+
+One-liner: load → EDA → rank/plot → features → baselines → Optuna tune → select best → view in Streamlit / serve via FastAPI.
+
+
+────────────────────────────────────────
+2) SAMPLE PLOT (INSERT THIS IMAGE IN THE DOC)
+────────────────────────────────────────
+
+Image file (attach/insert into your doc):
+docs/assets/sample_capture_PAY_0.png
+
+What the plot shows (PAY_0 = latest repayment status):
+- X-axis: bins of PAY_0
+- Bars: how many clients sit in each bin
+- Line: capture rate = defaults in bin / all defaults
+
+How to read it:
+- Tall bar → that value is common.
+- High line → that bin holds a large share of the defaults.
+- In Streamlit → Rank & Plot, use the dropdown to change the feature (LIMIT_BAL, AGE, PAY_2, …).
+
+
+────────────────────────────────────────
+3) OPTUNA / BAYESIAN OPTIMISATION (HIGH OVERVIEW)
+────────────────────────────────────────
+
+Goal: find good hyperparameters (tree depth, learning rate, …) that maximise a score (we used PR-AUC), without trying every possible combination.
+
+Simple comparison:
+- Grid / random search → try many settings blindly (slow / wasteful).
+- Bayesian optimisation (Optuna) → learn from past trials and suggest the next setting wisely.
+
+The loop (remember this):
+1. Try a set of hyperparameters.
+2. Train and score the model.
+3. Update what we believe “works”.
+4. Suggest the next try (mix of exploit best areas + explore uncertain areas).
+5. Repeat for N trials, then retrain with the best settings.
+
+Optuna (default TPE) in one line:
+It samples more where past good trials lived, and less where bad trials lived.
+
+In our session:
+- Separate Optuna runs for Random Forest and XGBoost.
+- Compare on hold-out PR-AUC.
+- Show the winner and feature importance in Streamlit → Modelling.
+
+
+────────────────────────────────────────
+4) HANDY COMMANDS
+────────────────────────────────────────
+
+streamlit run app/streamlit_app.py
+
+python -c "from credit_fraud.pipeline import run_training; run_training()"
+
+
+────────────────────────────────────────
+5) OPTIONAL DEEPER READING
+────────────────────────────────────────
+
+docs/bayesian_optimization_optuna.md
+docs/xgboost_guide.md
+docs/dataset_features.md
