@@ -300,3 +300,163 @@ def plot_tpe_parzen_example() -> go.Figure:
         legend={"orientation": "h", "y": 1.12},
     )
     return fig
+
+
+def plot_search_methods_overview() -> go.Figure:
+    """Visual comparison of grid, random, and Bayesian search."""
+    methods = ["Grid", "Random", "Bayesian (TPE)"]
+    tries = [100, 40, 25]
+    quality = [55, 45, 85]
+    fig = make_subplots(
+        rows=1,
+        cols=2,
+        subplot_titles=("Trials needed (lower is better)", "Finds good region (higher is better)"),
+        horizontal_spacing=0.14,
+    )
+    fig.add_trace(
+        go.Bar(
+            x=methods,
+            y=tries,
+            marker_color=["#C45C26", "#888888", "#5A8F6F"],
+            text=tries,
+            textposition="outside",
+            showlegend=False,
+        ),
+        row=1,
+        col=1,
+    )
+    fig.add_trace(
+        go.Bar(
+            x=methods,
+            y=quality,
+            marker_color=["#C45C26", "#888888", "#5A8F6F"],
+            text=[f"{q}%" for q in quality],
+            textposition="outside",
+            showlegend=False,
+        ),
+        row=1,
+        col=2,
+    )
+    fig.update_yaxes(title_text="relative trial budget", row=1, col=1)
+    fig.update_yaxes(title_text="relative success", range=[0, 100], row=1, col=2)
+    fig.update_layout(
+        title="Grid explodes · random wanders · TPE learns from past trials",
+        template="plotly_white",
+        height=360,
+        margin={"t": 80, "b": 40},
+    )
+    return fig
+
+
+def plot_pr_auc_intuition(*, positive_rate: float = 0.22) -> go.Figure:
+    """PR curve sketch: random ranking vs a model that ranks defaults near the top."""
+    recall = np.linspace(0.0, 1.0, 80)
+    random_pr = np.full_like(recall, positive_rate)
+    good_pr = positive_rate + (1.0 - positive_rate) * (1.0 - (1.0 - recall) ** 1.4)
+    good_pr = np.clip(good_pr, positive_rate, 1.0)
+
+    fig = go.Figure()
+    fig.add_trace(
+        go.Scatter(
+            x=recall,
+            y=random_pr,
+            mode="lines",
+            name=f"random ranking ≈ {positive_rate:.0%}",
+            line={"color": "#888888", "dash": "dash", "width": 2},
+        )
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=recall,
+            y=good_pr,
+            mode="lines",
+            name="good model (defaults near top)",
+            line={"color": "#2F6F8F", "width": 3},
+            fill="tozeroy",
+            fillcolor="rgba(47, 111, 143, 0.15)",
+        )
+    )
+    fig.add_annotation(
+        x=0.55,
+        y=0.52,
+        text="PR-AUC ≈ shaded area",
+        showarrow=True,
+        ax=0.2,
+        ay=-40,
+        font={"size": 11, "color": "#2F6F8F"},
+    )
+    fig.add_annotation(
+        x=0.75,
+        y=positive_rate + 0.02,
+        text=f"always predict 'no default'<br>accuracy ≈ {1 - positive_rate:.0%} but useless",
+        showarrow=False,
+        font={"size": 10, "color": "#666666"},
+        xanchor="left",
+    )
+    fig.update_layout(
+        title="Why PR-AUC on ~22% default rate",
+        xaxis_title="recall (fraction of defaults caught)",
+        yaxis_title="precision at that cutoff",
+        template="plotly_white",
+        height=380,
+        legend={"orientation": "h", "y": 1.12},
+        yaxis={"range": [0, 1.05]},
+    )
+    return fig
+
+
+def plot_tuning_task_overview(*, positive_rate: float = 0.22) -> go.Figure:
+    """One glance: imbalanced task, fixed features, tuned XGB knobs, PR-AUC score."""
+    fig = go.Figure()
+    blocks = [
+        (0.0, "Task", f"~{positive_rate:.0%} default\nnext month", "#C45C26"),
+        (1.35, "Fixed", "features\n(engineered)", "#888888"),
+        (2.7, "Tuned", "XGB depth\nlr · trees", "#2F6F8F"),
+        (4.05, "Score", "CV\nPR-AUC", "#5A8F6F"),
+    ]
+    for x, title, body, fill in blocks:
+        fig.add_shape(
+            type="rect",
+            x0=x,
+            y0=0.2,
+            x1=x + 1.1,
+            y1=1.0,
+            fillcolor=fill,
+            line={"color": fill, "width": 0},
+            layer="below",
+        )
+        fig.add_annotation(
+            x=x + 0.55,
+            y=0.78,
+            text=f"<b>{title}</b>",
+            showarrow=False,
+            font={"size": 12, "color": "white"},
+        )
+        fig.add_annotation(
+            x=x + 0.55,
+            y=0.45,
+            text=body.replace("\n", "<br>"),
+            showarrow=False,
+            font={"size": 10, "color": "white"},
+        )
+        if x < blocks[-1][0]:
+            fig.add_annotation(
+                x=x + 1.15,
+                y=0.6,
+                ax=x + 1.25,
+                ay=0.6,
+                showarrow=True,
+                arrowhead=2,
+                arrowcolor="#aaaaaa",
+                text="",
+            )
+    fig.update_layout(
+        title="What this lab tunes — and what stays fixed",
+        template="plotly_white",
+        height=240,
+        xaxis={"visible": False, "range": [-0.2, 5.3]},
+        yaxis={"visible": False, "range": [0.0, 1.2]},
+        margin={"l": 20, "r": 20, "t": 60, "b": 20},
+        showlegend=False,
+    )
+    return fig

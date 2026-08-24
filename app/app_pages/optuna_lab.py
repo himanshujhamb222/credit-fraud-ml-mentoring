@@ -39,10 +39,13 @@ from credit_fraud.optimize import (
 )
 from credit_fraud.optuna_plots import (
     plot_param_scatter,
+    plot_pr_auc_intuition,
+    plot_search_methods_overview,
     plot_search_scatter,
     plot_tpe_parzen_example,
     plot_tpe_vs_random_history,
     plot_trial_history,
+    plot_tuning_task_overview,
 )
 
 STEPS = [
@@ -185,53 +188,37 @@ def _holdout_block(
 
 def step_why() -> None:
     st.subheader("Why we tune")
-    st.markdown(
-        """
-- **Task:** next-month default (~22% of UCI accounts).
-- **Fixed:** features. **Tuned:** XGBoost knobs (depth, trees, learning rate).
-- **Score:** PR-AUC
-- **Why Optuna:** too many combos to try them all; next try uses past scores.
-"""
+    plotly_chart(plot_tuning_task_overview(positive_rate=0.22))
+    st.caption(
+        "Features stay fixed. Optuna searches XGB depth, learning rate, and tree count to maximize CV PR-AUC."
     )
 
 
 def step_search() -> None:
     st.subheader("Grid vs random vs Bayesian")
-    dataframe(
-        pd.DataFrame(
-            {
-                "Method": ["Grid", "Random", "Bayesian (Optuna TPE)"],
-                "Does": [
-                    "Every combo of depth × learning rate × …",
-                    "Draw settings uniformly. No memory.",
-                    "Next try looks like settings that scored well, plus a few odd ones.",
-                ],
-                "Problem": [
-                    "Explodes with 5–6 settings.",
-                    "Wastes tries on bad regions.",
-                    "A bit more machinery. Worth it.",
-                ],
-            }
-        ),
-        hide_index=True,
+    plotly_chart(plot_search_methods_overview())
+    st.caption(
+        "Grid tries every combo (explodes). Random has no memory. TPE samples near past winners with occasional exploration."
     )
 
 
 def step_loop() -> None:
     st.subheader("The loop")
-    st.code("pick settings → train, CV PR-AUC → store → pick next", language="text")
-    st.markdown(
+    mermaid_chart(
         """
-1. Pick settings (a trial).
-2. Train XGBoost. Score CV PR-AUC.
-3. Save `(settings, score)`.
-4. Next try: stay near good scores, still poke elsewhere.
-5. After N trials, refit `best_params` and score hold-out.
-
-**TPE:** first 3–5 trials are random. Then it splits past trials into high vs low PR-AUC and
-samples more from the high pile. That is the cluster you will see in **TPE vs random**.
-The next step writes the same idea in math.
+flowchart LR
+    A[pick settings] --> B[train XGB CV]
+    B --> C[PR-AUC score]
+    C --> D[store trial]
+    D --> E{TPE?}
+    E -->|yes| F[near good scores]
+    E -->|random| G[uniform draw]
+    F --> A
+    G --> A
 """
+    )
+    st.caption(
+        "First 3–5 trials are random. Then TPE splits past trials into high vs low PR-AUC and samples more from the high pile."
     )
 
 
@@ -394,17 +381,10 @@ def step_knobs() -> None:
 
 def step_prauc() -> None:
     st.subheader("Why PR-AUC")
-    st.markdown(
-        """
-~22% default. A model that never predicts default is already **~78% accurate** — useless.
-
-**PR-AUC** asks: if we rank accounts by predicted default, do the actual defaults sit near the top?
-
-Random ranking ≈ default rate ≈ **0.22**. A fitted model around **0.50–0.55** is more than 2× that.
-That is not “barely better than 0.50 ROC.” ROC 0.50 is a coin flip; PR-AUC 0.50 on this data is a real model.
-
-Optuna maximises PR-AUC (`direction="maximize"`).
-"""
+    plotly_chart(plot_pr_auc_intuition(positive_rate=0.22))
+    st.caption(
+        "~22% default rate. Always predicting 'no default' is ~78% accurate but useless. "
+        "PR-AUC rewards ranking actual defaults near the top. Optuna maximizes it (`direction='maximize'`)."
     )
 
 
