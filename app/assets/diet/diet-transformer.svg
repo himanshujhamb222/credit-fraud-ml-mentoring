@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 440" font-family="Georgia, 'Times New Roman', serif">
+  <style>
+    .box { fill: #faf6ef; stroke: #1a1a1a; stroke-width: 1.4; }
+    .hot { fill: #fff1d6; stroke: #c0392b; stroke-width: 1.4; }
+    .enc { fill: #e7edd9; stroke: #1a1a1a; stroke-width: 1.4; }
+    .title { font-size: 20px; font-weight: 700; fill: #1a1a1a; }
+    .label { font-size: 15px; font-weight: 700; fill: #1a1a1a; }
+    .content { font-size: 14px; fill: #1a1a1a; }
+  </style>
+  <text x="490" y="34" text-anchor="middle" class="title">2-layer transformer with relative position attention</text>
+  <rect x="60" y="70" width="140" height="44" class="hot"/>
+  <text x="130" y="98" text-anchor="middle" class="content">z_play</text>
+  <rect x="230" y="70" width="140" height="44" class="hot"/>
+  <text x="300" y="98" text-anchor="middle" class="content">z_ping</text>
+  <rect x="400" y="70" width="140" height="44" class="hot"/>
+  <text x="470" y="98" text-anchor="middle" class="content">z_pong</text>
+  <rect x="570" y="70" width="140" height="44" class="hot"/>
+  <text x="640" y="98" text-anchor="middle" class="content">z_CLS</text>
+  <rect x="120" y="150" width="540" height="180" class="enc"/>
+  <text x="390" y="186" text-anchor="middle" class="label">Transformer x 2</text>
+  <rect x="180" y="210" width="420" height="40" class="box"/>
+  <text x="390" y="236" text-anchor="middle" class="content">self-attention + relative distance bias a_ij^rel</text>
+  <rect x="180" y="266" width="420" height="40" class="box"/>
+  <text x="390" y="292" text-anchor="middle" class="content">feed-forward + residual</text>
+  <rect x="60" y="370" width="140" height="44" class="box"/>
+  <text x="130" y="398" text-anchor="middle" class="content">a_play</text>
+  <rect x="230" y="370" width="140" height="44" class="box"/>
+  <text x="300" y="398" text-anchor="middle" class="content">a_ping</text>
+  <rect x="400" y="370" width="140" height="44" class="box"/>
+  <text x="470" y="398" text-anchor="middle" class="content">a_pong</text>
+  <rect x="570" y="370" width="140" height="44" class="hot"/>
+  <text x="640" y="398" text-anchor="middle" class="content">a_CLS</text>
+  <text x="820" y="220" text-anchor="middle" class="content">to CRF</text>
+  <text x="820" y="398" text-anchor="middle" class="content">to intent</text>
+</svg>

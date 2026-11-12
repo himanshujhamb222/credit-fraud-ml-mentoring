@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 400" font-family="Georgia, 'Times New Roman', serif">
+  <style>
+    .box { fill: #faf6ef; stroke: #1a1a1a; stroke-width: 1.4; }
+    .hot { fill: #fff1d6; stroke: #c0392b; stroke-width: 1.4; }
+    .enc { fill: #e7edd9; stroke: #1a1a1a; stroke-width: 1.4; }
+    .dec { fill: #d7e3ee; stroke: #1a1a1a; stroke-width: 1.4; }
+    .title { font-size: 20px; font-weight: 700; fill: #1a1a1a; }
+    .label { font-size: 15px; font-weight: 700; fill: #1a1a1a; }
+    .content { font-size: 14px; fill: #1a1a1a; }
+  </style>
+  <text x="490" y="34" text-anchor="middle" class="title">Intent head - shared embedding space + dot-product loss</text>
+  <rect x="80" y="90" width="200" height="80" class="hot"/>
+  <text x="180" y="124" text-anchor="middle" class="label">a_CLS</text>
+  <text x="180" y="150" text-anchor="middle" class="content">-&gt; h_CLS in R^20</text>
+  <rect x="360" y="70" width="240" height="200" class="enc"/>
+  <text x="480" y="110" text-anchor="middle" class="label">label bank</text>
+  <rect x="390" y="130" width="180" height="36" class="hot"/>
+  <text x="480" y="154" text-anchor="middle" class="content">play_game  (+)</text>
+  <rect x="390" y="176" width="180" height="36" class="box"/>
+  <text x="480" y="200" text-anchor="middle" class="content">play_music (-)</text>
+  <rect x="390" y="222" width="180" height="36" class="box"/>
+  <text x="480" y="246" text-anchor="middle" class="content">set_alarm (-)</text>
+  <rect x="680" y="90" width="240" height="160" class="dec"/>
+  <text x="800" y="130" text-anchor="middle" class="label">S = h_CLS . h_y</text>
+  <text x="800" y="168" text-anchor="middle" class="content">pull S+ up</text>
+  <text x="800" y="196" text-anchor="middle" class="content">push S- down</text>
+  <text x="800" y="230" text-anchor="middle" class="content">rank by S at test</text>
+</svg>

@@ -28,6 +28,34 @@ def _plotly_kwargs(kwargs: dict[str, Any]) -> dict[str, Any]:
     return out
 
 
+def image(image: Any, **kwargs: Any) -> None:
+    """``st.image`` that stretches on both old (int width) and new APIs."""
+    params = inspect.signature(st.image).parameters
+    width_param = params.get("width")
+    ann = ""
+    default = inspect.Parameter.empty
+    if width_param is not None:
+        if width_param.annotation is not inspect.Parameter.empty:
+            ann = str(width_param.annotation)
+        default = width_param.default
+    # New Streamlit: width is Width / defaults to "content" and accepts "stretch".
+    # Old Streamlit: width is int | None; stretch via use_container_width / use_column_width.
+    supports_stretch = "Width" in ann or default in ("content", "stretch")
+    if supports_stretch:
+        kwargs.setdefault("width", "stretch")
+        kwargs.pop("use_container_width", None)
+        kwargs.pop("use_column_width", None)
+    elif "use_container_width" in params:
+        kwargs.setdefault("use_container_width", True)
+        if kwargs.get("width") == "stretch":
+            kwargs.pop("width", None)
+    elif "use_column_width" in params:
+        kwargs.setdefault("use_column_width", True)
+        if kwargs.get("width") == "stretch":
+            kwargs.pop("width", None)
+    st.image(image, **kwargs)
+
+
 def plotly_chart(fig: Any, **kwargs: Any) -> None:
     st.plotly_chart(fig, **_plotly_kwargs(kwargs))
 

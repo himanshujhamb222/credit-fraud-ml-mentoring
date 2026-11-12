@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 360" font-family="Georgia, 'Times New Roman', serif">
+  <style>
+    .box { fill: #faf6ef; stroke: #1a1a1a; stroke-width: 1.4; }
+    .hot { fill: #fff1d6; stroke: #c0392b; stroke-width: 1.4; }
+    .enc { fill: #e7edd9; stroke: #1a1a1a; stroke-width: 1.4; }
+    .title { font-size: 20px; font-weight: 700; fill: #1a1a1a; }
+    .label { font-size: 15px; font-weight: 700; fill: #1a1a1a; }
+    .content { font-size: 14px; fill: #1a1a1a; }
+  </style>
+  <text x="490" y="34" text-anchor="middle" class="title">Optional mask loss - rebuild hidden tokens</text>
+  <rect x="60" y="80" width="140" height="50" class="box"/>
+  <text x="130" y="112" text-anchor="middle" class="content">play</text>
+  <rect x="230" y="80" width="140" height="50" class="hot"/>
+  <text x="300" y="112" text-anchor="middle" class="content">__MASK__</text>
+  <rect x="400" y="80" width="140" height="50" class="box"/>
+  <text x="470" y="112" text-anchor="middle" class="content">pong</text>
+  <text x="300" y="170" text-anchor="middle" class="content">was "ping" | of selected tokens: 70% MASK | 10% random | 20% keep</text>
+  <rect x="180" y="200" width="420" height="110" class="enc"/>
+  <text x="390" y="240" text-anchor="middle" class="label">same loss shape as intent</text>
+  <text x="390" y="272" text-anchor="middle" class="content">L_M from a_MASK vs token embeddings</text>
+  <text x="760" y="250" text-anchor="middle" class="content">L_total = L_I + L_E + L_M</text>
+</svg>

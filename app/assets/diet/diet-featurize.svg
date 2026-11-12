@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 420" font-family="Georgia, 'Times New Roman', serif">
+  <style>
+    .box { fill: #faf6ef; stroke: #1a1a1a; stroke-width: 1.4; }
+    .hot { fill: #fff1d6; stroke: #c0392b; stroke-width: 1.4; }
+    .enc { fill: #e7edd9; stroke: #1a1a1a; stroke-width: 1.4; }
+    .dec { fill: #d7e3ee; stroke: #1a1a1a; stroke-width: 1.4; }
+    .title { font-size: 20px; font-weight: 700; fill: #1a1a1a; }
+    .label { font-size: 15px; font-weight: 700; fill: #1a1a1a; }
+    .content { font-size: 14px; fill: #1a1a1a; }
+  </style>
+  <text x="490" y="34" text-anchor="middle" class="title">Per-token featurization (shared weights)</text>
+  <rect x="40" y="70" width="200" height="70" class="hot"/>
+  <text x="140" y="100" text-anchor="middle" class="label">token</text>
+  <text x="140" y="122" text-anchor="middle" class="content">e.g. ping</text>
+  <rect x="280" y="50" width="220" height="50" class="box"/>
+  <text x="390" y="82" text-anchor="middle" class="content">sparse: word + char n-grams</text>
+  <rect x="280" y="120" width="220" height="50" class="dec"/>
+  <text x="390" y="152" text-anchor="middle" class="content">dense: GloVe / BERT / ConveRT</text>
+  <rect x="540" y="50" width="180" height="50" class="enc"/>
+  <text x="630" y="82" text-anchor="middle" class="content">FF -&gt; dense width</text>
+  <rect x="540" y="120" width="180" height="50" class="box"/>
+  <text x="630" y="152" text-anchor="middle" class="content">keep as-is</text>
+  <rect x="760" y="70" width="180" height="100" class="hot"/>
+  <text x="850" y="110" text-anchor="middle" class="label">concat</text>
+  <text x="850" y="138" text-anchor="middle" class="content">then FF -&gt; 256</text>
+  <text x="490" y="230" text-anchor="middle" class="content">__CLS__ seed: ConveRT sentence emb | BERT [CLS] | GloVe mean</text>
+  <rect x="120" y="270" width="740" height="100" class="enc"/>
+  <text x="490" y="310" text-anchor="middle" class="label">z_t = W2 [ W1 x_sparse,t  ||  x_dense,t ]</text>
+  <text x="490" y="342" text-anchor="middle" class="content">plug-and-play: turn dense on/off without redesigning the body</text>
+</svg>

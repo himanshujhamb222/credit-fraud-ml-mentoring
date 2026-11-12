@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 860" font-family="Georgia, 'Times New Roman', serif">
+  <style>
+    .panel { fill: #fff; stroke: #1a1a1a; stroke-width: 1.5; }
+    .box { fill: #faf6ef; stroke: #1a1a1a; stroke-width: 1.4; }
+    .hot { fill: #fff1d6; stroke: #c0392b; stroke-width: 1.4; }
+    .norm { fill: #e7edd9; stroke: #1a1a1a; stroke-width: 1.2; }
+    .ffn { fill: #d7e3ee; stroke: #1a1a1a; stroke-width: 1.2; }
+    .title { font-size: 20px; font-weight: 700; fill: #1a1a1a; }
+    .label { font-size: 16px; font-weight: 700; fill: #1a1a1a; }
+    .content { font-size: 15px; fill: #1a1a1a; }
+    .caption { font-size: 15px; fill: #333; }
+  </style>
+  <text x="550" y="34" text-anchor="middle" class="title">Where attention sits in the block</text>
+
+  <rect x="40" y="56" width="460" height="700" class="panel"/>
+  <text x="270" y="90" text-anchor="middle" class="label">Encoder block</text>
+  <rect x="145" y="114" width="250" height="36" class="hot"/><text x="270" y="137" text-anchor="middle" class="content">input</text>
+  <rect x="145" y="170" width="250" height="34" class="norm"/><text x="270" y="192" text-anchor="middle" class="content">norm</text>
+  <rect x="120" y="224" width="300" height="36" class="hot"/><text x="270" y="247" text-anchor="middle" class="content">self-attention</text>
+  <circle cx="270" cy="292" r="14" fill="#fff" stroke="#1a1a1a" stroke-width="1.4"/>
+  <text x="270" y="297" text-anchor="middle" class="content">+</text>
+  <rect x="145" y="326" width="250" height="34" class="norm"/><text x="270" y="348" text-anchor="middle" class="content">norm</text>
+  <rect x="120" y="380" width="300" height="36" class="ffn"/><text x="270" y="403" text-anchor="middle" class="content">small network</text>
+  <circle cx="270" cy="448" r="14" fill="#fff" stroke="#1a1a1a" stroke-width="1.4"/>
+  <text x="270" y="453" text-anchor="middle" class="content">+</text>
+  <rect x="145" y="482" width="250" height="36" class="hot"/><text x="270" y="505" text-anchor="middle" class="content">output</text>
+  <path d="M145 132 C70 132 70 292 254 292" fill="none" stroke="#1a1a1a" stroke-width="1.2" stroke-dasharray="5 4"/>
+  <path d="M145 310 C70 310 70 448 254 448" fill="none" stroke="#1a1a1a" stroke-width="1.2" stroke-dasharray="5 4"/>
+  <text x="270" y="560" text-anchor="middle" class="caption">The dashed line adds the</text>
+  <text x="270" y="584" text-anchor="middle" class="caption">earlier vector back.</text>
+  <text x="270" y="640" text-anchor="middle" class="caption">Every word can see</text>
+  <text x="270" y="664" text-anchor="middle" class="caption">every other word.</text>
+  <text x="270" y="720" text-anchor="middle" class="caption">BERT uses this block.</text>
+
+  <rect x="600" y="56" width="460" height="700" class="panel"/>
+  <text x="830" y="90" text-anchor="middle" class="label">Decoder block</text>
+  <rect x="705" y="110" width="250" height="32" class="hot"/><text x="830" y="131" text-anchor="middle" class="content">input</text>
+  <rect x="705" y="156" width="250" height="30" class="norm"/><text x="830" y="176" text-anchor="middle" class="content">norm</text>
+  <rect x="680" y="200" width="300" height="32" class="hot"/><text x="830" y="221" text-anchor="middle" class="content">masked self-attention</text>
+  <circle cx="830" cy="254" r="12" fill="#fff" stroke="#1a1a1a" stroke-width="1.4"/>
+  <text x="830" y="259" text-anchor="middle" class="content">+</text>
+  <rect x="705" y="278" width="250" height="30" class="norm"/><text x="830" y="298" text-anchor="middle" class="content">norm</text>
+  <rect x="680" y="322" width="300" height="32" class="hot"/><text x="830" y="343" text-anchor="middle" class="content">cross-attention</text>
+  <circle cx="830" cy="376" r="12" fill="#fff" stroke="#1a1a1a" stroke-width="1.4"/>
+  <text x="830" y="381" text-anchor="middle" class="content">+</text>
+  <rect x="705" y="400" width="250" height="30" class="norm"/><text x="830" y="420" text-anchor="middle" class="content">norm</text>
+  <rect x="705" y="444" width="250" height="32" class="ffn"/><text x="830" y="465" text-anchor="middle" class="content">small network</text>
+  <circle cx="830" cy="498" r="12" fill="#fff" stroke="#1a1a1a" stroke-width="1.4"/>
+  <text x="830" y="503" text-anchor="middle" class="content">+</text>
+  <rect x="705" y="524" width="250" height="32" class="hot"/><text x="830" y="545" text-anchor="middle" class="content">output</text>
+  <text x="830" y="600" text-anchor="middle" class="caption">A word sees itself and</text>
+  <text x="830" y="624" text-anchor="middle" class="caption">earlier words only.</text>
+  <text x="830" y="680" text-anchor="middle" class="caption">GPT keeps that mask.</text>
+  <text x="830" y="704" text-anchor="middle" class="caption">GPT drops cross-attention.</text>
+
+  <line x1="500" y1="338" x2="672" y2="338" stroke="#c0392b" stroke-width="1.6"/>
+  <text x="550" y="308" text-anchor="middle" class="caption">source</text>
+
+  <text x="550" y="800" text-anchor="middle" class="caption">Attention mixes the words. The small network changes each vector.</text>
+  <text x="550" y="830" text-anchor="middle" class="caption">The plus sign keeps a path for the earlier vector.</text>
+</svg>

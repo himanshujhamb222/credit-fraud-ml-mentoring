@@ -1,0 +1,1 @@
+"""DIET architecture teaching lessons."""

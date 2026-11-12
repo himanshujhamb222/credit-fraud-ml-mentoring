@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 400" font-family="Georgia, 'Times New Roman', serif">
+  <style>
+    .box { fill: #faf6ef; stroke: #1a1a1a; stroke-width: 1.4; }
+    .hot { fill: #fff1d6; stroke: #c0392b; stroke-width: 1.4; }
+    .enc { fill: #e7edd9; stroke: #1a1a1a; stroke-width: 1.4; }
+    .dec { fill: #d7e3ee; stroke: #1a1a1a; stroke-width: 1.4; }
+    .title { font-size: 20px; font-weight: 700; fill: #1a1a1a; }
+    .label { font-size: 15px; font-weight: 700; fill: #1a1a1a; }
+    .content { font-size: 14px; fill: #1a1a1a; }
+  </style>
+  <text x="490" y="34" text-anchor="middle" class="title">Entity head - linear-chain CRF on token vectors</text>
+  <rect x="80" y="70" width="160" height="50" class="box"/>
+  <text x="160" y="102" text-anchor="middle" class="content">a_play</text>
+  <rect x="280" y="70" width="160" height="50" class="box"/>
+  <text x="360" y="102" text-anchor="middle" class="content">a_ping</text>
+  <rect x="480" y="70" width="160" height="50" class="box"/>
+  <text x="560" y="102" text-anchor="middle" class="content">a_pong</text>
+  <rect x="120" y="160" width="560" height="90" class="enc"/>
+  <text x="400" y="196" text-anchor="middle" class="label">CRF</text>
+  <text x="400" y="224" text-anchor="middle" class="content">emissions psi(a_t, y_t) + transitions psi(y_t-1, y_t)</text>
+  <rect x="80" y="290" width="160" height="50" class="dec"/>
+  <text x="160" y="322" text-anchor="middle" class="content">O</text>
+  <rect x="280" y="290" width="160" height="50" class="hot"/>
+  <text x="360" y="322" text-anchor="middle" class="content">B-game_name</text>
+  <rect x="480" y="290" width="160" height="50" class="hot"/>
+  <text x="560" y="322" text-anchor="middle" class="content">L-game_name</text>
+  <text x="800" y="200" text-anchor="middle" class="content">L_E = -log P(y|a)</text>
+  <text x="800" y="322" text-anchor="middle" class="content">Viterbi at test</text>
+</svg>

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 640" font-family="Georgia, 'Times New Roman', serif">
+  <style>
+    .box { fill: #faf6ef; stroke: #1a1a1a; stroke-width: 1.5; }
+    .on { fill: #fff1d6; stroke: #c0392b; stroke-width: 1; }
+    .off { fill: #2c3e50; stroke: #1a1a1a; stroke-width: 1; }
+    .title { font-size: 20px; font-weight: 700; fill: #1a1a1a; }
+    .label { font-size: 16px; font-weight: 700; fill: #1a1a1a; }
+    .content { font-size: 16px; fill: #1a1a1a; }
+    .caption { font-size: 15px; fill: #333; }
+  </style>
+  <text x="520" y="34" text-anchor="middle" class="title">Full view, or only the past</text>
+
+  <text x="230" y="78" text-anchor="middle" class="label">Encoder. BERT</text>
+  <g transform="translate(110 96)">
+    <g class="on">
+      <rect x="0" y="0" width="32" height="32"/><rect x="36" y="0" width="32" height="32"/><rect x="72" y="0" width="32" height="32"/><rect x="108" y="0" width="32" height="32"/><rect x="144" y="0" width="32" height="32"/><rect x="180" y="0" width="32" height="32"/>
+      <rect x="0" y="36" width="32" height="32"/><rect x="36" y="36" width="32" height="32"/><rect x="72" y="36" width="32" height="32"/><rect x="108" y="36" width="32" height="32"/><rect x="144" y="36" width="32" height="32"/><rect x="180" y="36" width="32" height="32"/>
+      <rect x="0" y="72" width="32" height="32"/><rect x="36" y="72" width="32" height="32"/><rect x="72" y="72" width="32" height="32"/><rect x="108" y="72" width="32" height="32"/><rect x="144" y="72" width="32" height="32"/><rect x="180" y="72" width="32" height="32"/>
+      <rect x="0" y="108" width="32" height="32"/><rect x="36" y="108" width="32" height="32"/><rect x="72" y="108" width="32" height="32"/><rect x="108" y="108" width="32" height="32"/><rect x="144" y="108" width="32" height="32"/><rect x="180" y="108" width="32" height="32"/>
+      <rect x="0" y="144" width="32" height="32"/><rect x="36" y="144" width="32" height="32"/><rect x="72" y="144" width="32" height="32"/><rect x="108" y="144" width="32" height="32"/><rect x="144" y="144" width="32" height="32"/><rect x="180" y="144" width="32" height="32"/>
+      <rect x="0" y="180" width="32" height="32"/><rect x="36" y="180" width="32" height="32"/><rect x="72" y="180" width="32" height="32"/><rect x="108" y="180" width="32" height="32"/><rect x="144" y="180" width="32" height="32"/><rect x="180" y="180" width="32" height="32"/>
+    </g>
+  </g>
+  <text x="230" y="340" text-anchor="middle" class="caption">Every cell is open.</text>
+  <text x="230" y="366" text-anchor="middle" class="caption">A word can use both sides.</text>
+
+  <text x="790" y="78" text-anchor="middle" class="label">Decoder. GPT</text>
+  <g transform="translate(670 96)">
+    <rect x="0" y="0" width="32" height="32" class="on"/><rect x="36" y="0" width="32" height="32" class="off"/><rect x="72" y="0" width="32" height="32" class="off"/><rect x="108" y="0" width="32" height="32" class="off"/><rect x="144" y="0" width="32" height="32" class="off"/><rect x="180" y="0" width="32" height="32" class="off"/>
+    <rect x="0" y="36" width="32" height="32" class="on"/><rect x="36" y="36" width="32" height="32" class="on"/><rect x="72" y="36" width="32" height="32" class="off"/><rect x="108" y="36" width="32" height="32" class="off"/><rect x="144" y="36" width="32" height="32" class="off"/><rect x="180" y="36" width="32" height="32" class="off"/>
+    <rect x="0" y="72" width="32" height="32" class="on"/><rect x="36" y="72" width="32" height="32" class="on"/><rect x="72" y="72" width="32" height="32" class="on"/><rect x="108" y="72" width="32" height="32" class="off"/><rect x="144" y="72" width="32" height="32" class="off"/><rect x="180" y="72" width="32" height="32" class="off"/>
+    <rect x="0" y="108" width="32" height="32" class="on"/><rect x="36" y="108" width="32" height="32" class="on"/><rect x="72" y="108" width="32" height="32" class="on"/><rect x="108" y="108" width="32" height="32" class="on"/><rect x="144" y="108" width="32" height="32" class="off"/><rect x="180" y="108" width="32" height="32" class="off"/>
+    <rect x="0" y="144" width="32" height="32" class="on"/><rect x="36" y="144" width="32" height="32" class="on"/><rect x="72" y="144" width="32" height="32" class="on"/><rect x="108" y="144" width="32" height="32" class="on"/><rect x="144" y="144" width="32" height="32" class="on"/><rect x="180" y="144" width="32" height="32" class="off"/>
+    <rect x="0" y="180" width="32" height="32" class="on"/><rect x="36" y="180" width="32" height="32" class="on"/><rect x="72" y="180" width="32" height="32" class="on"/><rect x="108" y="180" width="32" height="32" class="on"/><rect x="144" y="180" width="32" height="32" class="on"/><rect x="180" y="180" width="32" height="32" class="on"/>
+  </g>
+  <text x="790" y="340" text-anchor="middle" class="caption">Dark cells are the future.</text>
+  <text x="790" y="366" text-anchor="middle" class="caption">Those weights become 0.</text>
+
+  <rect x="80" y="410" width="880" height="150" class="box"/>
+  <text x="108" y="450" class="content">Training. One pass. A loss at every position.</text>
+  <text x="108" y="492" class="content">Generation. Add one new word. Then repeat.</text>
+  <text x="108" y="534" class="content">The loss. Position i predicts word i + 1.</text>
+
+  <text x="520" y="604" text-anchor="middle" class="caption">The mask is added before softmax. exp of -inf is 0.</text>
+</svg>

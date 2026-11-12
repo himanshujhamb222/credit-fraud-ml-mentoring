@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 520" font-family="Georgia, 'Times New Roman', serif">
+  <style>
+    .box { fill: #faf6ef; stroke: #1a1a1a; stroke-width: 1.4; }
+    .hot { fill: #fff1d6; stroke: #c0392b; stroke-width: 1.4; }
+    .enc { fill: #e7edd9; stroke: #1a1a1a; stroke-width: 1.4; }
+    .dec { fill: #d7e3ee; stroke: #1a1a1a; stroke-width: 1.4; }
+    .title { font-size: 20px; font-weight: 700; fill: #1a1a1a; }
+    .label { font-size: 16px; font-weight: 700; fill: #1a1a1a; }
+    .content { font-size: 15px; fill: #1a1a1a; }
+    .caption { font-size: 14px; fill: #333; }
+  </style>
+  <text x="490" y="36" text-anchor="middle" class="title">DIET - one body, two dialogue NLU jobs</text>
+  <rect x="40" y="70" width="900" height="44" class="hot"/>
+  <text x="490" y="98" text-anchor="middle" class="content">"play ping pong"  -&gt;  tokens: play | ping | pong | __CLS__</text>
+  <rect x="40" y="140" width="900" height="120" class="enc"/>
+  <text x="490" y="172" text-anchor="middle" class="label">Shared trunk</text>
+  <text x="490" y="200" text-anchor="middle" class="content">sparse + dense features  -&gt;  2-layer transformer (relative position)</text>
+  <text x="490" y="230" text-anchor="middle" class="caption">contextual vectors a_play, a_ping, a_pong, a_CLS</text>
+  <rect x="40" y="300" width="420" height="160" class="dec"/>
+  <text x="250" y="340" text-anchor="middle" class="label">Intent head</text>
+  <text x="250" y="372" text-anchor="middle" class="content">embed a_CLS and intent labels</text>
+  <text x="250" y="400" text-anchor="middle" class="content">dot-product ranking -&gt; play_game</text>
+  <text x="250" y="432" text-anchor="middle" class="caption">L_I</text>
+  <rect x="520" y="300" width="420" height="160" class="hot"/>
+  <text x="730" y="340" text-anchor="middle" class="label">Entity head (CRF)</text>
+  <text x="730" y="372" text-anchor="middle" class="content">tag each token / span</text>
+  <text x="730" y="400" text-anchor="middle" class="content">game_name = "ping pong"</text>
+  <text x="730" y="432" text-anchor="middle" class="caption">L_E</text>
+</svg>

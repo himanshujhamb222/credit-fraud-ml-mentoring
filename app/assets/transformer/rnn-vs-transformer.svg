@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 520" font-family="Georgia, 'Times New Roman', serif">
+  <style>
+    .box { fill: #faf6ef; stroke: #1a1a1a; stroke-width: 1.5; }
+    .hot { fill: #fff1d6; stroke: #c0392b; stroke-width: 1.5; }
+    .title { font-size: 20px; font-weight: 700; fill: #1a1a1a; }
+    .label { font-size: 16px; font-weight: 700; fill: #1a1a1a; }
+    .content { font-size: 15px; fill: #1a1a1a; }
+    .caption { font-size: 15px; fill: #333; }
+  </style>
+  <text x="520" y="36" text-anchor="middle" class="title">One word at a time, or every word in one step</text>
+
+  <text x="40" y="84" class="label">RNN</text>
+  <rect x="150" y="62" width="84" height="40" class="hot"/><text x="192" y="87" text-anchor="middle" class="content">word 1</text>
+  <rect x="268" y="62" width="84" height="40" class="hot"/><text x="310" y="87" text-anchor="middle" class="content">word 2</text>
+  <rect x="386" y="62" width="84" height="40" class="hot"/><text x="428" y="87" text-anchor="middle" class="content">word 3</text>
+  <rect x="504" y="62" width="84" height="40" class="hot"/><text x="546" y="87" text-anchor="middle" class="content">word 4</text>
+  <rect x="622" y="62" width="84" height="40" class="hot"/><text x="664" y="87" text-anchor="middle" class="content">word 5</text>
+  <rect x="740" y="62" width="84" height="40" class="hot"/><text x="782" y="87" text-anchor="middle" class="content">word 6</text>
+  <rect x="858" y="62" width="84" height="40" class="hot"/><text x="900" y="87" text-anchor="middle" class="content">word 7</text>
+  <line x1="234" y1="82" x2="260" y2="82" stroke="#1a1a1a" stroke-width="1.5"/>
+  <line x1="352" y1="82" x2="378" y2="82" stroke="#1a1a1a" stroke-width="1.5"/>
+  <line x1="470" y1="82" x2="496" y2="82" stroke="#1a1a1a" stroke-width="1.5"/>
+  <line x1="588" y1="82" x2="614" y2="82" stroke="#1a1a1a" stroke-width="1.5"/>
+  <line x1="706" y1="82" x2="732" y2="82" stroke="#1a1a1a" stroke-width="1.5"/>
+  <line x1="824" y1="82" x2="850" y2="82" stroke="#1a1a1a" stroke-width="1.5"/>
+  <text x="520" y="140" text-anchor="middle" class="caption">Each box waits for the box on its left.</text>
+
+  <line x1="40" y1="168" x2="1000" y2="168" stroke="#bbbbbb" stroke-width="1"/>
+
+  <text x="40" y="176" class="label">Transformer</text>
+  <rect x="150" y="192" width="84" height="40" class="box"/><text x="192" y="217" text-anchor="middle" class="content">word 1</text>
+  <rect x="268" y="192" width="84" height="40" class="box"/><text x="310" y="217" text-anchor="middle" class="content">word 2</text>
+  <rect x="386" y="192" width="84" height="40" class="box"/><text x="428" y="217" text-anchor="middle" class="content">word 3</text>
+  <rect x="504" y="192" width="84" height="40" class="box"/><text x="546" y="217" text-anchor="middle" class="content">word 4</text>
+  <rect x="622" y="192" width="84" height="40" class="box"/><text x="664" y="217" text-anchor="middle" class="content">word 5</text>
+  <rect x="740" y="192" width="84" height="40" class="box"/><text x="782" y="217" text-anchor="middle" class="content">word 6</text>
+  <rect x="858" y="192" width="84" height="40" class="box"/><text x="900" y="217" text-anchor="middle" class="content">word 7</text>
+  <text x="520" y="268" text-anchor="middle" class="caption">Every word is ready in the same step.</text>
+
+  <line x1="192" y1="292" x2="430" y2="332" stroke="#c0392b" stroke-width="1.2"/>
+  <line x1="310" y1="292" x2="470" y2="332" stroke="#c0392b" stroke-width="1.2"/>
+  <line x1="428" y1="292" x2="500" y2="332" stroke="#c0392b" stroke-width="1.2"/>
+  <line x1="546" y1="292" x2="540" y2="332" stroke="#c0392b" stroke-width="1.2"/>
+  <line x1="664" y1="292" x2="580" y2="332" stroke="#c0392b" stroke-width="1.2"/>
+  <line x1="782" y1="292" x2="610" y2="332" stroke="#c0392b" stroke-width="1.2"/>
+  <line x1="900" y1="292" x2="650" y2="332" stroke="#c0392b" stroke-width="1.2"/>
+
+  <rect x="340" y="360" width="360" height="52" class="hot"/>
+  <text x="520" y="392" text-anchor="middle" class="content">softmax(Q K^T / sqrt(d)) V</text>
+
+  <text x="520" y="444" text-anchor="middle" class="caption">One multiply mixes every word.</text>
+  <text x="520" y="474" text-anchor="middle" class="caption">The amount of math is similar. The words do not wait in a line.</text>
+</svg>

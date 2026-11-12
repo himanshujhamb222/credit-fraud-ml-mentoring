@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 760" font-family="Georgia, 'Times New Roman', serif">
+  <style>
+    .box { fill: #faf6ef; stroke: #1a1a1a; stroke-width: 1.4; }
+    .hot { fill: #fff1d6; stroke: #c0392b; stroke-width: 1.4; }
+    .enc { fill: #e7edd9; stroke: #1a1a1a; stroke-width: 1.4; }
+    .dec { fill: #d7e3ee; stroke: #1a1a1a; stroke-width: 1.4; }
+    .title { font-size: 20px; font-weight: 700; fill: #1a1a1a; }
+    .label { font-size: 16px; font-weight: 700; fill: #1a1a1a; }
+    .content { font-size: 15px; fill: #1a1a1a; }
+    .caption { font-size: 15px; fill: #333; }
+  </style>
+  <text x="520" y="34" text-anchor="middle" class="title">Read a source. Write a target.</text>
+
+  <rect x="40" y="64" width="280" height="36" class="hot"/>
+  <text x="180" y="87" text-anchor="middle" class="content">source words</text>
+  <rect x="40" y="124" width="280" height="220" class="enc"/>
+  <text x="180" y="156" text-anchor="middle" class="label">Encoder</text>
+  <rect x="70" y="176" width="220" height="36" class="box"/>
+  <text x="180" y="199" text-anchor="middle" class="content">self-attention</text>
+  <rect x="70" y="228" width="220" height="36" class="box"/>
+  <text x="180" y="251" text-anchor="middle" class="content">small network</text>
+  <text x="180" y="300" text-anchor="middle" class="caption">Sees the whole source.</text>
+  <rect x="40" y="364" width="280" height="36" class="hot"/>
+  <text x="180" y="387" text-anchor="middle" class="content">encoder output</text>
+
+  <rect x="720" y="64" width="280" height="36" class="hot"/>
+  <text x="860" y="87" text-anchor="middle" class="content">target so far</text>
+  <rect x="700" y="124" width="300" height="276" class="dec"/>
+  <text x="850" y="156" text-anchor="middle" class="label">Decoder</text>
+  <rect x="725" y="176" width="250" height="36" class="box"/>
+  <text x="850" y="199" text-anchor="middle" class="content">masked self-attention</text>
+  <rect x="725" y="228" width="250" height="36" class="hot"/>
+  <text x="850" y="251" text-anchor="middle" class="content">cross-attention</text>
+  <rect x="725" y="280" width="250" height="36" class="box"/>
+  <text x="850" y="303" text-anchor="middle" class="content">small network</text>
+  <rect x="725" y="340" width="250" height="36" class="hot"/>
+  <text x="850" y="363" text-anchor="middle" class="content">next-word scores</text>
+
+  <rect x="370" y="220" width="300" height="78" class="box"/>
+  <text x="520" y="250" text-anchor="middle" class="content">Q comes from the decoder.</text>
+  <text x="520" y="276" text-anchor="middle" class="content">K and V come from the encoder.</text>
+  <line x1="320" y1="382" x2="370" y2="270" stroke="#c0392b" stroke-width="1.6"/>
+  <line x1="670" y1="259" x2="725" y2="246" stroke="#c0392b" stroke-width="1.6"/>
+
+  <rect x="40" y="470" width="460" height="110" class="box"/>
+  <text x="270" y="504" text-anchor="middle" class="label">T5</text>
+  <text x="270" y="534" text-anchor="middle" class="caption">Hide a span of the source.</text>
+  <text x="270" y="558" text-anchor="middle" class="caption">The decoder writes that span back.</text>
+
+  <rect x="540" y="470" width="460" height="110" class="box"/>
+  <text x="770" y="504" text-anchor="middle" class="label">BART</text>
+  <text x="770" y="534" text-anchor="middle" class="caption">Corrupt the source in a few ways.</text>
+  <text x="770" y="558" text-anchor="middle" class="caption">The decoder restores the full sentence.</text>
+
+  <text x="520" y="630" text-anchor="middle" class="caption">Translation and speech use this shape.</text>
+  <text x="520" y="660" text-anchor="middle" class="caption">The encoder runs once. The decoder looks up that same output at every new word.</text>
+  <text x="520" y="700" text-anchor="middle" class="caption">Chat models usually stay decoder-only.</text>
+</svg>

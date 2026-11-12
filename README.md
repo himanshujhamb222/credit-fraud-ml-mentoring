@@ -56,6 +56,9 @@ streamlit run app/streamlit_app.py
 
 - **Optuna lab** — notes → TPE math → `optimize.py` / `make_xgboost` → TPE vs random on UCI data → live XGBoost search. Previous / Next.
 - **EDA and modelling** — target, rank-and-plot, features, importance (train first for the last tab).
+- **Transformer lab** — encoder, decoder, attention, BERT, GPT, temperature, top-k, and top-p, with the arithmetic on the page.
+- **DIET lab** — Dual Intent and Entity Transformer ([paper](https://arxiv.org/pdf/2004.09936)): featurization → transformer → CRF entities → intent ranking → mask/total loss, with worked math.
+- **Naive Bayes lab** — four movie reviews: Bayes → `fit()` counts → Laplace word probs → log-odds → code → worked `predict("good movie")`.
 
 ## FastAPI (inference)
 

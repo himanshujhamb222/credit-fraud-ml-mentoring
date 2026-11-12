@@ -1,4 +1,4 @@
-"""Streamlit entry: Optuna teaching lab + CRF lab + EDA dashboard.
+"""Streamlit entry: Optuna + CRF + EDA + transformer + DIET + Naive Bayes labs.
 
 Works on Streamlit 1.32+ (no st.navigation required). The script directory
 is ``app/``, so page imports are ``app_pages.*``.
@@ -23,7 +23,14 @@ st.set_page_config(page_title="Credit default mentoring", layout="wide")
 
 page = st.sidebar.radio(
     "Page",
-    options=["Optuna lab", "CRF lab", "EDA and modelling"],
+    options=[
+        "Optuna lab",
+        "CRF lab",
+        "EDA and modelling",
+        "Transformer lab",
+        "DIET lab",
+        "Naive Bayes lab",
+    ],
     index=0,
     key="nav_page",
 )
@@ -37,6 +44,18 @@ try:
         from app_pages.crf_lab import render as render_crf
 
         render_crf()
+    elif page == "Transformer lab":
+        from app_pages.transformer_lab import render as render_transformer
+
+        render_transformer()
+    elif page == "DIET lab":
+        from app_pages.diet_lab import render as render_diet
+
+        render_diet()
+    elif page == "Naive Bayes lab":
+        from app_pages.naive_bayes_lab import render as render_nb
+
+        render_nb()
     else:
         from app_pages.eda import render as render_eda
 
