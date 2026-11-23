@@ -59,6 +59,7 @@ streamlit run app/streamlit_app.py
 - **Transformer lab** — encoder, decoder, attention, BERT, GPT, temperature, top-k, and top-p, with the arithmetic on the page.
 - **DIET lab** — Dual Intent and Entity Transformer ([paper](https://arxiv.org/pdf/2004.09936)): featurization → transformer → CRF entities → intent ranking → mask/total loss, with worked math.
 - **Naive Bayes lab** — four movie reviews: Bayes → `fit()` counts → Laplace word probs → log-odds → code → worked `predict("good movie")`.
+- **Anomaly detection lab** — AI/ML for financial anomaly detection: foundations, Z-score, IQR, Mahalanobis, Isolation Forest (deep dive), One-Class SVM, Autoencoders (deep dive), LOF/Graph/Temporal, evaluation, and interview mastery.
 
 ## FastAPI (inference)
 

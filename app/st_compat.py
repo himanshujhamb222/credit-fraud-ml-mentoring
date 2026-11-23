@@ -64,6 +64,20 @@ def plotly_in(slot: Any, fig: Any, **kwargs: Any) -> None:
     slot.plotly_chart(fig, **_plotly_kwargs(kwargs))
 
 
+def altair_chart(chart: Any, **kwargs: Any) -> None:
+    """``st.altair_chart`` that stretches cleanly on both Streamlit 1.32 and 1.62+."""
+    params = inspect.signature(st.altair_chart).parameters
+    out = dict(kwargs)
+    if "width" in params:
+        out.setdefault("width", "stretch")
+        out.pop("use_container_width", None)
+    else:
+        out.pop("width", None)
+        if "use_container_width" in params:
+            out["use_container_width"] = True
+    st.altair_chart(chart, **out)
+
+
 def _dataframe_kwargs(kwargs: dict[str, Any]) -> dict[str, Any]:
     params = inspect.signature(st.dataframe).parameters
     out = dict(kwargs)

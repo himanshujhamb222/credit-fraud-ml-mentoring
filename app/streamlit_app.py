@@ -1,4 +1,4 @@
-"""Streamlit entry: Optuna + CRF + EDA + transformer + DIET + Naive Bayes labs.
+"""Streamlit entry: Optuna + CRF + EDA + transformer + DIET + Naive Bayes + Anomaly labs.
 
 Works on Streamlit 1.32+ (no st.navigation required). The script directory
 is ``app/``, so page imports are ``app_pages.*``.
@@ -30,6 +30,7 @@ page = st.sidebar.radio(
         "Transformer lab",
         "DIET lab",
         "Naive Bayes lab",
+        "Anomaly detection lab",
     ],
     index=0,
     key="nav_page",
@@ -56,6 +57,10 @@ try:
         from app_pages.naive_bayes_lab import render as render_nb
 
         render_nb()
+    elif page == "Anomaly detection lab":
+        from app_pages.anomaly_lab import render as render_anomaly
+
+        render_anomaly()
     else:
         from app_pages.eda import render as render_eda
 

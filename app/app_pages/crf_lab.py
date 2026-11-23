@@ -373,7 +373,7 @@ log P(DET) + log P("the" | DET) = log({p_start:.1f}) + log({p_emit:.1f}) = {log_
     with t8:
         plotly_chart(plot_pos_viterbi_trellis(pos_hmm, path))
         st.markdown(
-            """
+            r"""
 - **Complexity:** $5 \text{ words} \times 3^2 \text{ tags}^2 = 45$ evaluations vs 243 full paths.
 - Viterbi keeps strictly the best partial route entering each tag node.
 """
@@ -427,7 +427,7 @@ $$P(\mathbf{y} \mid \mathbf{x}) = \frac{1}{Z(\mathbf{x})} \exp\left(\sum_{t=1}^N
         )
 
         st.markdown(
-            """
+            r"""
 | Feature Template | Meaning | Weight Role |
 |---|---|---|
 | `(START, DET, "the")` | Sentence begins with determiner *the* | High positive $\to$ encourages DET at start |
